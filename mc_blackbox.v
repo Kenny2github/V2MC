@@ -1,7 +1,7 @@
 `default_nettype none
 
 (* blackbox *)
-module MC_DFF15 (CLK, D, Q);
+module MC_DFF29 (CLK, D, Q);
 	parameter WIDTH = 1;
 
 	input wire CLK;
@@ -10,7 +10,7 @@ module MC_DFF15 (CLK, D, Q);
 endmodule
 
 (* blackbox *)
-module MC_ADFF15 (CLK, ARST, D, Q);
+module MC_ADFF29 (CLK, ARST, D, Q);
 	parameter WIDTH = 1;
 	parameter ARST_VALUE = {WIDTH{1'b0}};
 
