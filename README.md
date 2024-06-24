@@ -19,4 +19,6 @@ Currently we map the following [Yosys internal cells](https://yosyshq.readthedoc
 * `$dff, $sdff, $sdffe` → `MC_DFF15`
 * `$adff, $adffe` → `MC_ADFF15`
 
+Redstone signal strength is the main factor leading to the limitation of `WIDTH` to 15 when any input/output is a number of bits independent of `WIDTH`. The technology mapping process reduces, for example, a 32-bit `$dff` to two 15-bit and one 2-bit `MC_DFF15`s.
+
 All others we allow `techmap` to map to [Yosys internal gates](https://yosyshq.readthedocs.io/projects/yosys/en/latest/yosys_internals/formats/cell_library.html#gates), which we then map to custom primitives:
