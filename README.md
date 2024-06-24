@@ -13,3 +13,10 @@ The following must be in your `PATH`:
 
 ## I/O Format
 For input, we take one or more Verilog HDL design files. For output, we produce a Minecraft structure file.
+
+## Technology mapping
+Currently we map the following [Yosys internal cells](https://yosyshq.readthedocs.io/projects/yosys/en/latest/yosys_internals/formats/cell_library.html#rtl-cells) to custom primitives:
+* `$dff, $sdff, $sdffe` → `MC_DFF15`
+* `$adff, $adffe` → `MC_ADFF15`
+
+All others we allow `techmap` to map to [Yosys internal gates](https://yosyshq.readthedocs.io/projects/yosys/en/latest/yosys_internals/formats/cell_library.html#gates), which we then map to custom primitives:

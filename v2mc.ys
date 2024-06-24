@@ -1,0 +1,26 @@
+# the following lines are prepended by build.sh:
+# read_verilog -sv $*
+# hierarchy -check -top $TOP
+
+# boilerplate analysis & elaboration
+read_verilog -lib mc_blackbox.v
+proc; opt; fsm; opt; memory; opt
+
+# techmap to coarse-grained MC_* primitives
+techmap -map mc_techlib.v
+opt
+json -o mc_techmap.json
+write_rtlil mc_techmap.rtlil
+show -width -format svg -prefix ./mc_techmap
+
+# techmap simple cells to Yosys internal gates
+simplemap; opt
+json -o mc_simplemap.json
+write_rtlil mc_simplemap.rtlil
+show -width -format svg -prefix ./mc_simplemap
+
+# techmap the rest of the cells to Yosys internal gates
+techmap; opt
+json -o techmap.json
+write_rtlil techmap.rtlil
+show -width -format svg -prefix ./techmap
