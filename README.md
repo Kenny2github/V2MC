@@ -11,6 +11,8 @@ The following must be in your `PATH`:
 * Python 3
 * Yosys 0.42
 
+We require the dependencies in `requirements.txt` in order to manipulate NBT structures.
+
 ## I/O Format
 For input, we take one or more Verilog HDL design files. For output, we produce a Minecraft structure file.
 

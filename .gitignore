@@ -3,3 +3,6 @@
 *.rtlil
 *.svg
 *.log
+*.pyc
+.venv/
+__pycache__/
