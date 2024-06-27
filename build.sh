@@ -8,6 +8,8 @@ fi
 TOP=$1
 shift
 
+mkdir -p build show
+
 echo "read_verilog -sv $*" > tmp.ys
 echo "hierarchy -check -top $TOP" >> tmp.ys
 cat v2mc.ys >> tmp.ys

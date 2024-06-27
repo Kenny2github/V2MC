@@ -1,7 +1,5 @@
-*.dot
-*.json
-*.rtlil
-*.svg
+build/
+show/
 *.log
 *.pyc
 .venv/
