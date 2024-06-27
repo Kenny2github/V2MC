@@ -3,7 +3,7 @@
 # hierarchy -check -top $TOP
 
 # boilerplate analysis & elaboration
-read_verilog -lib mc_blackbox.v
+read_verilog -lib mc_simlib.v
 proc; opt; fsm; opt; memory; opt
 
 # techmap to coarse-grained MC_* primitives
