@@ -16,9 +16,9 @@ For input, we take one or more Verilog HDL design files. For output, we produce 
 
 ## Technology mapping
 Currently we map the following [Yosys internal cells](https://yosyshq.readthedocs.io/projects/yosys/en/latest/yosys_internals/formats/cell_library.html#rtl-cells) to custom primitives:
-* `$dff, $sdff, $sdffe` → `MC_DFF29`
-* `$adff, $adffe` → `MC_ADFF29`
+* `$dff, $sdff, $sdffe` → `MC_DFF31`
+* `$adff, $adffe` → `MC_ADFF31`
 
-Redstone signal strength is the main factor leading to the limitation of `WIDTH` to 29 (15 signal strength, in two directions) when any input/output is a number of bits independent of `WIDTH`. The technology mapping process reduces, for example, a 64-bit `$dff` to two 29-bit and one 6-bit `MC_DFF29`s.
+Redstone signal strength is the main factor leading to the limitation of `WIDTH` to 31 (15 signal strength, in two directions, separated by a hard-powered block) when any input/output is a number of bits independent of `WIDTH`. The technology mapping process reduces, for example, a 64-bit `$dff` to two 31-bit and one 2-bit `MC_DFF31`s.
 
 All others we allow `techmap` to map to [Yosys internal gates](https://yosyshq.readthedocs.io/projects/yosys/en/latest/yosys_internals/formats/cell_library.html#gates), which we then map to custom primitives:

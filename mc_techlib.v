@@ -28,13 +28,13 @@ module \$dff (CLK, D, Q);
 			assign _clk = ~CLK;
 		end
 
-		for (i = 0; i <= WIDTH/29; i++) begin
-			MC_DFF29 #(
-				.WIDTH(min(WIDTH - (29 * i), 29)),
+		for (i = 0; i <= WIDTH/31; i++) begin
+			MC_DFF31 #(
+				.WIDTH(min(WIDTH - (31 * i), 31)),
 			) dff (
 				.CLK(_clk),
-				.D(D[29 * i +: min(WIDTH - (29 * i), 29)]),
-				.Q(Q[29 * i +: min(WIDTH - (29 * i), 29)])
+				.D(D[31 * i +: min(WIDTH - (31 * i), 31)]),
+				.Q(Q[31 * i +: min(WIDTH - (31 * i), 31)])
 			);
 		end
 	endgenerate
@@ -75,15 +75,15 @@ module \$adff (CLK, ARST, D, Q);
 			assign _arst = ~ARST;
 		end
 
-		for (i = 0; i <= WIDTH/29; i++) begin
-			MC_ADFF29 #(
-				.WIDTH(min(WIDTH - (29 * i), 29)),
+		for (i = 0; i <= WIDTH/31; i++) begin
+			MC_ADFF31 #(
+				.WIDTH(min(WIDTH - (31 * i), 31)),
 				.ARST_VALUE(ARST_VALUE)
 			) dff (
 				.CLK(_clk),
 				.ARST(_arst),
-				.D(D[29 * i +: min(WIDTH - (29 * i), 29)]),
-				.Q(Q[29 * i +: min(WIDTH - (29 * i), 29)])
+				.D(D[31 * i +: min(WIDTH - (31 * i), 31)]),
+				.Q(Q[31 * i +: min(WIDTH - (31 * i), 31)])
 			);
 		end
 	endgenerate
