@@ -11,16 +11,17 @@ techmap -map rtl/mc_techlib.v
 opt
 json -o build/mc_techmap.json
 write_rtlil build/mc_techmap.rtlil
-show -width -format svg -prefix show/mc_techmap
+show -width -colors 1 -format svg -prefix show/mc_techmap
 
 # techmap simple cells to Yosys internal gates
-simplemap; opt
+simplemap
+opt
 json -o build/mc_simplemap.json
 write_rtlil build/mc_simplemap.rtlil
-show -width -format svg -prefix show/mc_simplemap
+show -width -colors 1 -format svg -prefix show/mc_simplemap
 
 # techmap the rest of the cells to Yosys internal gates
 techmap; opt
 json -o build/techmap.json
 write_rtlil build/techmap.rtlil
-show -width -format svg -prefix show/techmap
+show -width -colors 1 -format svg -prefix show/techmap
