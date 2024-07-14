@@ -1,0 +1,17 @@
+{
+	"MC_DFF31": {
+		// CLK port to cell clock: 5
+		// D port to cell input: 6
+		// cell clock to Q port: 2
+		"t_cq": 7, // CLK port to cell clock delay (5) + cell clock to Q port delay (2)
+		"t_setup": 1 // D port to cell input delay (6) - CLK port to cell clock delay (5)
+	},
+	"MC_ADFF31": {
+		// CLK port to cell clock: 8
+		// D port to cell input: 6
+		// cell clock to Q port: 6
+		"t_rq": 8, // ARST port to Q port delay
+		"t_cq": 14, // CLK port to cell clock delay (8) + cell clock to Q port delay (6)
+		"t_setup": -2 // D port to cell input delay (6) - CLK port to cell clock delay (8)
+	}
+}
