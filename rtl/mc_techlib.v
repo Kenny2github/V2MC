@@ -219,7 +219,7 @@ module \$reduce_and (A, Y);
 		end else if (A_WIDTH <= 16) begin
 			MC_UAND16 #(
 				.WIDTH(A_WIDTH),
-			) reduce_and (
+			) _TECHMAP_REPLACE_ (
 				.A(A),
 				.Y(Y[0])
 			);
@@ -270,7 +270,7 @@ module \$reduce_or (A, Y);
 		end else if (A_WIDTH <= 16) begin
 			MC_UOR16 #(
 				.WIDTH(A_WIDTH),
-			) reduce_or (
+			) _TECHMAP_REPLACE_ (
 				.A(A),
 				.Y(Y[0])
 			);
@@ -321,21 +321,21 @@ module \$reduce_xor (A, Y);
 		end else if (A_WIDTH <= 4) begin
 			MC_UXOR4 #(
 				.WIDTH(A_WIDTH),
-			) reduce_xor (
+			) _TECHMAP_REPLACE_ (
 				.A(A),
 				.Y(Y[0])
 			);
 		end else if (A_WIDTH <= 8) begin
 			MC_UXOR8 #(
 				.WIDTH(A_WIDTH),
-			) reduce_xor (
+			) _TECHMAP_REPLACE_ (
 				.A(A),
 				.Y(Y[0])
 			);
 		end else if (A_WIDTH <= 16) begin
 			MC_UXOR16 #(
 				.WIDTH(A_WIDTH),
-			) reduce_xor (
+			) _TECHMAP_REPLACE_ (
 				.A(A),
 				.Y(Y[0])
 			);
@@ -370,7 +370,7 @@ module \$reduce_xnor (A, Y);
 		.A_SIGNED(A_SIGNED),
 		.A_WIDTH(A_WIDTH),
 		.Y_WIDTH(Y_WIDTH),
-	) reduce_xor (
+	) _TECHMAP_REPLACE_ (
 		.A(A),
 		.Y(Y_n)
 	);
