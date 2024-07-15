@@ -226,8 +226,10 @@ module \$reduce_and (A, Y);
 		end else begin
 			wire [A_WIDTH/16:0] _collate;
 			for (i = 0; i <= A_WIDTH/16; i++) begin
-				MC_UAND16 #(
-					.WIDTH(min(A_WIDTH - (16 * i), 16)),
+				\$reduce_and #(
+					.A_SIGNED(0),
+					.A_WIDTH(min(A_WIDTH - (16 * i), 16)),
+					.Y_WIDTH(1),
 				) reduce_and (
 					.A(A[16 * i +: min(A_WIDTH - (16 * i), 16)]),
 					.Y(_collate[i])
@@ -277,8 +279,10 @@ module \$reduce_or (A, Y);
 		end else begin
 			wire [A_WIDTH/16:0] _collate;
 			for (i = 0; i <= A_WIDTH/16; i++) begin
-				MC_UOR16 #(
-					.WIDTH(min(A_WIDTH - (16 * i), 16)),
+				\$reduce_or #(
+					.A_SIGNED(0),
+					.A_WIDTH(min(A_WIDTH - (16 * i), 16)),
+					.Y_WIDTH(1),
 				) reduce_or (
 					.A(A[16 * i +: min(A_WIDTH - (16 * i), 16)]),
 					.Y(_collate[i])
@@ -342,8 +346,10 @@ module \$reduce_xor (A, Y);
 		end else begin
 			wire [A_WIDTH/16:0] _collate;
 			for (i = 0; i <= A_WIDTH/16; i++) begin
-				MC_UXOR16 #(
-					.WIDTH(min(A_WIDTH - (16 * i), 16)),
+				\$reduce_xor #(
+					.A_SIGNED(0),
+					.A_WIDTH(min(A_WIDTH - (16 * i), 16)),
+					.Y_WIDTH(1),
 				) reduce_xor (
 					.A(A[16 * i +: min(A_WIDTH - (16 * i), 16)]),
 					.Y(_collate[i])
@@ -367,7 +373,7 @@ module \$reduce_xnor (A, Y);
 	wire [1023:0] _TECHMAP_DO_ = "opt";
 
 	\$reduce_xor #(
-		.A_SIGNED(A_SIGNED),
+		.A_SIGNED(0),
 		.A_WIDTH(A_WIDTH),
 		.Y_WIDTH(Y_WIDTH),
 	) _TECHMAP_REPLACE_ (
@@ -395,7 +401,7 @@ module \$reduce_bool (A, Y);
 	wire [1023:0] _TECHMAP_DO_ = "opt";
 
 	\$reduce_or #(
-		.A_SIGNED(A_SIGNED),
+		.A_SIGNED(0),
 		.A_WIDTH(A_WIDTH),
 		.Y_WIDTH(Y_WIDTH),
 	) _TECHMAP_REPLACE_ (
@@ -443,8 +449,10 @@ module \$logic_not (A, Y);
 			wire [A_WIDTH/16:0] _collate;
 			// if we need multiple cells, regular ORs are more efficient...
 			for (i = 0; i <= A_WIDTH/16; i++) begin
-				MC_UOR16 #(
-					.WIDTH(min(A_WIDTH - (16 * i), 16)),
+				\$reduce_or #(
+					.A_SIGNED(0),
+					.A_WIDTH(min(A_WIDTH - (16 * i), 16)),
+					.Y_WIDTH(1),
 				) reduce_or (
 					.A(A[16 * i +: min(A_WIDTH - (16 * i), 16)]),
 					.Y(_collate[i])
