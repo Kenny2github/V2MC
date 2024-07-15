@@ -3,32 +3,26 @@ from collections.abc import Iterator
 from typing import cast
 from nbt_structure_utils import Cuboid, NBTStructure, Vector
 
-def MC_DFF31(WIDTH: int) -> NBTStructure:
-    # load structures
-    struct = NBTStructure()
-    dff = NBTStructure('structures/mc_dff31.nbt')
-    # cut off excess inputs
-    width = WIDTH * 2 + 1 # 2 blocks per bit + 2 blocks per clk - 1
-    input_max_coords = dff.get_max_coords()
-    input_max_coords.z = width - 1
-    volume = cast(Iterator[Vector], Cuboid(Vector(0, 0, 0), input_max_coords))
-    # assemble structure
-    struct.clone_structure(dff, Vector(0, 0, 0), volume)
+def clone_clamp(struct: NBTStructure, name: str, width: int) -> NBTStructure:
+    loaded = NBTStructure(name)
+    max_coords = loaded.get_max_coords()
+    max_coords.z = width - 1
+    volume = cast(Iterator[Vector], Cuboid(Vector(0, 0, 0), max_coords))
+    struct.clone_structure(loaded, Vector(0, 0, 0), volume)
     return struct
+
+def MC_DFF31(WIDTH: int) -> NBTStructure:
+    width = WIDTH * 2 + 1 # 2 blocks per bit + 2 blocks per clk - 1
+    return clone_clamp(NBTStructure(), 'structures/mc_dff31.nbt', width)
 
 def MC_ADFF31(WIDTH: int, ARST_VALUE: int) -> NBTStructure:
     # load structures
-    struct = NBTStructure()
     a0dff1_cell = NBTStructure('structures/mc_a0dff1_cell.nbt')
     a1dff1_cell = NBTStructure('structures/mc_a1dff1_cell.nbt')
-    adff_input = NBTStructure('structures/mc_adff_input.nbt')
-    # cut off excess inputs
-    width = WIDTH * 2 + 3 # 2 blocks per bit + 2 blocks per (clk, arst) - 1
-    input_max_coords = adff_input.get_max_coords()
-    input_max_coords.z = width - 1
-    volume = cast(Iterator[Vector], Cuboid(Vector(0, 0, 0), input_max_coords))
     # assemble structures together
-    struct.clone_structure(adff_input, Vector(0, 0, 0), volume)
+    width = WIDTH * 2 + 3 # 2 blocks per bit + 2 blocks per (clk, arst) - 1
+    struct = clone_clamp(NBTStructure(), 'structures/mc_adff_input.nbt', width)
+    input_max_coords = struct.get_max_coords()
     for z in range(WIDTH):
         bit = WIDTH - 1 - z
         struct.clone_structure(
