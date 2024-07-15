@@ -1,4 +1,4 @@
-#!/bin/python3
+#!/usr/bin/env python3
 from collections.abc import Iterator
 from typing import cast
 from nbt_structure_utils import Cuboid, NBTStructure, Vector
