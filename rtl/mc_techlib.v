@@ -196,6 +196,7 @@ module \$reduce_and (A, Y);
 	output wire [Y_WIDTH-1:0] Y;
 
 	wire _TECHMAP_FAIL_ = (A_WIDTH < 2) || (Y_WIDTH < 1);
+	wire [1023:0] _TECHMAP_DO_ = "opt";
 
 	function integer min;
 		input integer a, b;
@@ -233,7 +234,6 @@ module \$reduce_and (A, Y);
 				);
 			end
 			assign Y[0] = &_collate;
-			wire [1023:0] _TECHMAP_DO_ = "opt";
 		end
 	endgenerate
 endmodule
@@ -247,6 +247,7 @@ module \$reduce_or (A, Y);
 	output wire [Y_WIDTH-1:0] Y;
 
 	wire _TECHMAP_FAIL_ = (A_WIDTH < 2) || (Y_WIDTH < 1);
+	wire [1023:0] _TECHMAP_DO_ = "opt";
 
 	function integer min;
 		input integer a, b;
@@ -284,7 +285,6 @@ module \$reduce_or (A, Y);
 				);
 			end
 			assign Y[0] = |_collate;
-			wire [1023:0] _TECHMAP_DO_ = "opt";
 		end
 	endgenerate
 endmodule
@@ -298,6 +298,7 @@ module \$reduce_xor (A, Y);
 	output wire [Y_WIDTH-1:0] Y;
 
 	wire _TECHMAP_FAIL_ = (A_WIDTH < 2) || (Y_WIDTH < 1);
+	wire [1023:0] _TECHMAP_DO_ = "opt";
 
 	function integer min;
 		input integer a, b;
@@ -349,7 +350,6 @@ module \$reduce_xor (A, Y);
 				);
 			end
 			assign Y[0] = ^_collate;
-			wire [1023:0] _TECHMAP_DO_ = "opt";
 		end
 	endgenerate
 endmodule
@@ -363,6 +363,8 @@ module \$reduce_xnor (A, Y);
 	output wire [Y_WIDTH-1:0] Y;
 
 	wire [Y_WIDTH-1:0] Y_n;
+
+	wire [1023:0] _TECHMAP_DO_ = "opt";
 
 	\$reduce_xor #(
 		.A_SIGNED(A_SIGNED),
@@ -390,6 +392,8 @@ module \$reduce_bool (A, Y);
 	input wire [A_WIDTH-1:0] A;
 	output wire [Y_WIDTH-1:0] Y;
 
+	wire [1023:0] _TECHMAP_DO_ = "opt";
+
 	\$reduce_or #(
 		.A_SIGNED(A_SIGNED),
 		.A_WIDTH(A_WIDTH),
@@ -409,6 +413,7 @@ module \$logic_not (A, Y);
 	output wire [Y_WIDTH-1:0] Y;
 
 	wire _TECHMAP_FAIL_ = (A_WIDTH < 2) || (Y_WIDTH < 1);
+	wire [1023:0] _TECHMAP_DO_ = "opt";
 
 	function integer min;
 		input integer a, b;
@@ -447,7 +452,6 @@ module \$logic_not (A, Y);
 			end
 			// ...and this can use NOR if it works out that way
 			assign Y[0] = !_collate;
-			wire [1023:0] _TECHMAP_DO_ = "opt";
 		end
 	endgenerate
 endmodule
