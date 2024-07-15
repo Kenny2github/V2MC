@@ -5,7 +5,9 @@ module \$dff (CLK, D, Q);
 	parameter CLK_POLARITY = 1'b1;
 
 	input wire CLK;
+	(* force_downto *)
 	input wire [WIDTH-1:0] D;
+	(* force_downto *)
 	output wire [WIDTH-1:0] Q;
 
 	wire _TECHMAP_FAIL_ = WIDTH < 1;
@@ -47,7 +49,9 @@ module \$adff (CLK, ARST, D, Q);
 	parameter ARST_VALUE = {WIDTH{1'b0}};
 
 	input wire CLK, ARST;
+	(* force_downto *)
 	input wire [WIDTH-1:0] D;
+	(* force_downto *)
 	output wire [WIDTH-1:0] Q;
 
 	wire _TECHMAP_FAIL_ = WIDTH < 1;
@@ -96,7 +100,9 @@ module \$sdff (CLK, SRST, D, Q);
 	parameter SRST_VALUE = {WIDTH{1'b0}};
 
 	input wire CLK, SRST;
+	(* force_downto *)
 	input wire [WIDTH-1:0] D;
+	(* force_downto *)
 	output wire [WIDTH-1:0] Q;
 
 	wire _srst;
@@ -127,7 +133,9 @@ module \$sdffe (CLK, SRST, EN, D, Q);
 	parameter EN_POLARITY = 1'b1;
 
 	input wire CLK, SRST, EN;
+	(* force_downto *)
 	input wire [WIDTH-1:0] D;
+	(* force_downto *)
 	output wire [WIDTH-1:0] Q;
 
 	wire _en;
@@ -161,7 +169,9 @@ module \$adffe (CLK, ARST, EN, D, Q);
 	parameter EN_POLARITY = 1'b1;
 
 	input wire CLK, ARST, EN;
+	(* force_downto *)
 	input wire [WIDTH-1:0] D;
+	(* force_downto *)
 	output wire [WIDTH-1:0] Q;
 
 	wire _en;
@@ -192,7 +202,9 @@ module \$reduce_and (A, Y);
 	parameter A_WIDTH = 2;
 	parameter Y_WIDTH = 1;
 
+	(* force_downto *)
 	input wire [A_WIDTH-1:0] A;
+	(* force_downto *)
 	output wire [Y_WIDTH-1:0] Y;
 
 	wire _TECHMAP_FAIL_ = (A_WIDTH < 2) || (Y_WIDTH < 1);
@@ -245,7 +257,9 @@ module \$reduce_or (A, Y);
 	parameter A_WIDTH = 2;
 	parameter Y_WIDTH = 1;
 
+	(* force_downto *)
 	input wire [A_WIDTH-1:0] A;
+	(* force_downto *)
 	output wire [Y_WIDTH-1:0] Y;
 
 	wire _TECHMAP_FAIL_ = (A_WIDTH < 2) || (Y_WIDTH < 1);
@@ -298,7 +312,9 @@ module \$reduce_xor (A, Y);
 	parameter A_WIDTH = 2;
 	parameter Y_WIDTH = 1;
 
+	(* force_downto *)
 	input wire [A_WIDTH-1:0] A;
+	(* force_downto *)
 	output wire [Y_WIDTH-1:0] Y;
 
 	wire _TECHMAP_FAIL_ = (A_WIDTH < 2) || (Y_WIDTH < 1);
@@ -365,9 +381,12 @@ module \$reduce_xnor (A, Y);
 	parameter A_WIDTH = 2;
 	parameter Y_WIDTH = 1;
 
+	(* force_downto *)
 	input wire [A_WIDTH-1:0] A;
+	(* force_downto *)
 	output wire [Y_WIDTH-1:0] Y;
 
+	(* force_downto *)
 	wire [Y_WIDTH-1:0] Y_n;
 
 	wire [1023:0] _TECHMAP_DO_ = "opt";
@@ -395,7 +414,9 @@ module \$reduce_bool (A, Y);
 	parameter A_WIDTH = 2;
 	parameter Y_WIDTH = 1;
 
+	(* force_downto *)
 	input wire [A_WIDTH-1:0] A;
+	(* force_downto *)
 	output wire [Y_WIDTH-1:0] Y;
 
 	wire [1023:0] _TECHMAP_DO_ = "opt";
@@ -415,7 +436,9 @@ module \$logic_not (A, Y);
 	parameter A_WIDTH = 2;
 	parameter Y_WIDTH = 1;
 
+	(* force_downto *)
 	input wire [A_WIDTH-1:0] A;
+	(* force_downto *)
 	output wire [Y_WIDTH-1:0] Y;
 
 	wire _TECHMAP_FAIL_ = (A_WIDTH < 2) || (Y_WIDTH < 1);
