@@ -207,7 +207,7 @@ module \$reduce_and (A, Y);
 	(* force_downto *)
 	output wire [Y_WIDTH-1:0] Y;
 
-	wire _TECHMAP_FAIL_ = (A_WIDTH < 2) || (Y_WIDTH < 1);
+	wire _TECHMAP_FAIL_ = (A_WIDTH < 1) || (Y_WIDTH < 1);
 	wire [1023:0] _TECHMAP_DO_ = "opt";
 
 	function integer min;
@@ -262,7 +262,7 @@ module \$reduce_or (A, Y);
 	(* force_downto *)
 	output wire [Y_WIDTH-1:0] Y;
 
-	wire _TECHMAP_FAIL_ = (A_WIDTH < 2) || (Y_WIDTH < 1);
+	wire _TECHMAP_FAIL_ = (A_WIDTH < 1) || (Y_WIDTH < 1);
 	wire [1023:0] _TECHMAP_DO_ = "opt";
 
 	function integer min;
@@ -317,7 +317,7 @@ module \$reduce_xor (A, Y);
 	(* force_downto *)
 	output wire [Y_WIDTH-1:0] Y;
 
-	wire _TECHMAP_FAIL_ = (A_WIDTH < 2) || (Y_WIDTH < 1);
+	wire _TECHMAP_FAIL_ = (A_WIDTH < 1) || (Y_WIDTH < 1);
 	wire [1023:0] _TECHMAP_DO_ = "opt";
 
 	function integer min;
@@ -441,7 +441,7 @@ module \$logic_not (A, Y);
 	(* force_downto *)
 	output wire [Y_WIDTH-1:0] Y;
 
-	wire _TECHMAP_FAIL_ = (A_WIDTH < 2) || (Y_WIDTH < 1);
+	wire _TECHMAP_FAIL_ = (A_WIDTH < 1) || (Y_WIDTH < 1);
 	wire [1023:0] _TECHMAP_DO_ = "opt";
 
 	function integer min;
