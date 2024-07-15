@@ -211,7 +211,11 @@ module \$reduce_and (A, Y);
 			assign Y[Y_WIDTH-1:1] = 1'b0;
 		end
 
-		if (A_WIDTH <= 16) begin
+		if (A_WIDTH == 1) begin
+			assign Y[0] = A[0];
+		end else if (A_WIDTH == 2) begin
+			assign Y[0] = A[0] & A[1];
+		end else if (A_WIDTH <= 16) begin
 			MC_UAND16 #(
 				.WIDTH(A_WIDTH),
 			) reduce_and (
@@ -258,7 +262,11 @@ module \$reduce_or (A, Y);
 			assign Y[Y_WIDTH-1:1] = 1'b0;
 		end
 
-		if (A_WIDTH <= 16) begin
+		if (A_WIDTH == 1) begin
+			assign Y[0] = A[0];
+		end else if (A_WIDTH == 2) begin
+			assign Y[0] = A[0] | A[1];
+		end else if (A_WIDTH <= 16) begin
 			MC_UOR16 #(
 				.WIDTH(A_WIDTH),
 			) reduce_or (
@@ -305,11 +313,10 @@ module \$reduce_xor (A, Y);
 			assign Y[Y_WIDTH-1:1] = 1'b0;
 		end
 
-		if (A_WIDTH == 2) begin
-			MC_UXOR2 reduce_xor (
-				.A(A),
-				.Y(Y[0])
-			);
+		if (A_WIDTH == 1) begin
+			assign Y[0] = A;
+		end else if (A_WIDTH == 2) begin
+			assign Y[0] = A[0] ^ A[1];
 		end else if (A_WIDTH <= 4) begin
 			MC_UXOR4 #(
 				.WIDTH(A_WIDTH),
@@ -417,7 +424,9 @@ module \$logic_not (A, Y);
 			assign Y[Y_WIDTH-1:1] = 1'b0;
 		end
 
-		if (A_WIDTH <= 16) begin
+		if (A_WIDTH == 1) begin
+			assign Y[0] = ~A[0];
+		end else if (A_WIDTH <= 16) begin
 			// note dedicated NOR cell
 			MC_UNOR16 #(
 				.WIDTH(A_WIDTH),
