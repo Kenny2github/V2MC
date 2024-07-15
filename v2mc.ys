@@ -8,7 +8,7 @@ proc; opt; fsm; opt; memory; opt
 
 # techmap to coarse-grained MC_* primitives
 techmap -map rtl/mc_techlib.v
-# splitnets -ports
+splitnets
 opt
 json -o build/mc_techmap.json
 write_rtlil build/mc_techmap.rtlil
