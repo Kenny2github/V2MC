@@ -37,3 +37,64 @@ module MC_ADFF31 (CLK, ARST, D, Q);
 		end
 	end
 endmodule
+
+module MC_UAND16 (A, Y);
+	parameter WIDTH = 2;
+
+	input wire [WIDTH-1:0] A;
+	output wire Y;
+
+	assign Y = &A;
+endmodule
+
+module MC_UNOR16 (A, Y);
+	parameter WIDTH = 2;
+
+	input wire [WIDTH-1:0] A;
+	output wire Y;
+
+	assign Y = !A;
+endmodule
+
+module MC_UOR16 (A, Y);
+	parameter WIDTH = 2;
+
+	input wire [WIDTH-1:0] A;
+	output wire Y;
+
+	assign Y = |A;
+endmodule
+
+module MC_UXOR2 (A, Y);
+	input wire [1:0] A;
+	output wire Y;
+
+	assign Y = ^A;
+endmodule
+
+module MC_UXOR4 (A, Y);
+	parameter WIDTH = 3;
+
+	input wire [WIDTH-1:0] A;
+	output wire Y;
+
+	assign Y = ^A;
+endmodule
+
+module MC_UXOR8 (A, Y);
+	parameter WIDTH = 5;
+
+	input wire [WIDTH-1:0] A;
+	output wire Y;
+
+	assign Y = ^A;
+endmodule
+
+module MC_UXOR16 (A, Y);
+	parameter WIDTH = 7;
+
+	input wire [WIDTH-1:0] A;
+	output wire Y;
+
+	assign Y = ^A;
+endmodule

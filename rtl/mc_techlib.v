@@ -186,3 +186,259 @@ module \$adffe (CLK, ARST, EN, D, Q);
 		.Q(Q)
 	);
 endmodule
+
+module \$reduce_and (A, Y);
+	parameter A_SIGNED = 0;
+	parameter A_WIDTH = 2;
+	parameter Y_WIDTH = 1;
+
+	input wire [A_WIDTH-1:0] A;
+	output wire [Y_WIDTH-1:0] Y;
+
+	wire _TECHMAP_FAIL_ = (A_WIDTH < 2) || (Y_WIDTH < 1);
+
+	function integer min;
+		input integer a, b;
+		begin
+			if (a < b) min = a;
+			else min = b;
+		end
+	endfunction
+
+	genvar i;
+	generate
+		if (Y_WIDTH > 1) begin
+			assign Y[Y_WIDTH-1:1] = 1'b0;
+		end
+
+		if (A_WIDTH <= 16) begin
+			MC_UAND16 #(
+				.WIDTH(A_WIDTH),
+			) reduce_and (
+				.A(A),
+				.Y(Y[0])
+			);
+		end else begin
+			wire [A_WIDTH/16:0] _collate;
+			for (i = 0; i <= A_WIDTH/16; i++) begin
+				MC_UAND16 #(
+					.WIDTH(min(A_WIDTH - (16 * i), 16)),
+				) reduce_and (
+					.A(A[16 * i +: min(A_WIDTH - (16 * i), 16)]),
+					.Y(_collate[i])
+				);
+			end
+			assign Y[0] = &_collate;
+			wire [1023:0] _TECHMAP_DO_ = "opt";
+		end
+	endgenerate
+endmodule
+
+module \$reduce_or (A, Y);
+	parameter A_SIGNED = 0;
+	parameter A_WIDTH = 2;
+	parameter Y_WIDTH = 1;
+
+	input wire [A_WIDTH-1:0] A;
+	output wire [Y_WIDTH-1:0] Y;
+
+	wire _TECHMAP_FAIL_ = (A_WIDTH < 2) || (Y_WIDTH < 1);
+
+	function integer min;
+		input integer a, b;
+		begin
+			if (a < b) min = a;
+			else min = b;
+		end
+	endfunction
+
+	genvar i;
+	generate
+		if (Y_WIDTH > 1) begin
+			assign Y[Y_WIDTH-1:1] = 1'b0;
+		end
+
+		if (A_WIDTH <= 16) begin
+			MC_UOR16 #(
+				.WIDTH(A_WIDTH),
+			) reduce_or (
+				.A(A),
+				.Y(Y[0])
+			);
+		end else begin
+			wire [A_WIDTH/16:0] _collate;
+			for (i = 0; i <= A_WIDTH/16; i++) begin
+				MC_UOR16 #(
+					.WIDTH(min(A_WIDTH - (16 * i), 16)),
+				) reduce_or (
+					.A(A[16 * i +: min(A_WIDTH - (16 * i), 16)]),
+					.Y(_collate[i])
+				);
+			end
+			assign Y[0] = |_collate;
+			wire [1023:0] _TECHMAP_DO_ = "opt";
+		end
+	endgenerate
+endmodule
+
+module \$reduce_xor (A, Y);
+	parameter A_SIGNED = 0;
+	parameter A_WIDTH = 2;
+	parameter Y_WIDTH = 1;
+
+	input wire [A_WIDTH-1:0] A;
+	output wire [Y_WIDTH-1:0] Y;
+
+	wire _TECHMAP_FAIL_ = (A_WIDTH < 2) || (Y_WIDTH < 1);
+
+	function integer min;
+		input integer a, b;
+		begin
+			if (a < b) min = a;
+			else min = b;
+		end
+	endfunction
+
+	genvar i;
+	generate
+		if (Y_WIDTH > 1) begin
+			assign Y[Y_WIDTH-1:1] = 1'b0;
+		end
+
+		if (A_WIDTH == 2) begin
+			MC_UXOR2 reduce_xor (
+				.A(A),
+				.Y(Y[0])
+			);
+		end else if (A_WIDTH <= 4) begin
+			MC_UXOR4 #(
+				.WIDTH(A_WIDTH),
+			) reduce_xor (
+				.A(A),
+				.Y(Y[0])
+			);
+		end else if (A_WIDTH <= 8) begin
+			MC_UXOR8 #(
+				.WIDTH(A_WIDTH),
+			) reduce_xor (
+				.A(A),
+				.Y(Y[0])
+			);
+		end else if (A_WIDTH <= 16) begin
+			MC_UXOR16 #(
+				.WIDTH(A_WIDTH),
+			) reduce_xor (
+				.A(A),
+				.Y(Y[0])
+			);
+		end else begin
+			wire [A_WIDTH/16:0] _collate;
+			for (i = 0; i <= A_WIDTH/16; i++) begin
+				MC_UXOR16 #(
+					.WIDTH(min(A_WIDTH - (16 * i), 16)),
+				) reduce_xor (
+					.A(A[16 * i +: min(A_WIDTH - (16 * i), 16)]),
+					.Y(_collate[i])
+				);
+			end
+			assign Y[0] = ^_collate;
+			wire [1023:0] _TECHMAP_DO_ = "opt";
+		end
+	endgenerate
+endmodule
+
+module \$reduce_xnor (A, Y);
+	parameter A_SIGNED = 0;
+	parameter A_WIDTH = 2;
+	parameter Y_WIDTH = 1;
+
+	input wire [A_WIDTH-1:0] A;
+	output wire [Y_WIDTH-1:0] Y;
+
+	wire [Y_WIDTH-1:0] Y_n;
+
+	\$reduce_xor #(
+		.A_SIGNED(A_SIGNED),
+		.A_WIDTH(A_WIDTH),
+		.Y_WIDTH(Y_WIDTH),
+	) reduce_xor (
+		.A(A),
+		.Y(Y_n)
+	);
+
+	generate
+		if (Y_WIDTH > 1) begin
+			assign Y = {Y_n[Y_WIDTH-1:1], ~Y_n[0]};
+		end else begin
+			assign Y = ~Y_n;
+		end
+	endgenerate
+endmodule
+
+module \$reduce_bool (A, Y);
+	parameter A_SIGNED = 0;
+	parameter A_WIDTH = 2;
+	parameter Y_WIDTH = 1;
+
+	input wire [A_WIDTH-1:0] A;
+	output wire [Y_WIDTH-1:0] Y;
+
+	\$reduce_or #(
+		.A_SIGNED(A_SIGNED),
+		.A_WIDTH(A_WIDTH),
+		.Y_WIDTH(Y_WIDTH),
+	) _TECHMAP_REPLACE_ (
+		.A(A),
+		.Y(Y)
+	);
+endmodule
+
+module \$logic_not (A, Y);
+	parameter A_SIGNED = 0;
+	parameter A_WIDTH = 2;
+	parameter Y_WIDTH = 1;
+
+	input wire [A_WIDTH-1:0] A;
+	output wire [Y_WIDTH-1:0] Y;
+
+	wire _TECHMAP_FAIL_ = (A_WIDTH < 2) || (Y_WIDTH < 1);
+
+	function integer min;
+		input integer a, b;
+		begin
+			if (a < b) min = a;
+			else min = b;
+		end
+	endfunction
+
+	genvar i;
+	generate
+		if (Y_WIDTH > 1) begin
+			assign Y[Y_WIDTH-1:1] = 1'b0;
+		end
+
+		if (A_WIDTH <= 16) begin
+			// note dedicated NOR cell
+			MC_UNOR16 #(
+				.WIDTH(A_WIDTH),
+			) _TECHMAP_REPLACE_ (
+				.A(A),
+				.Y(Y[0])
+			);
+		end else begin
+			wire [A_WIDTH/16:0] _collate;
+			// if we need multiple cells, regular ORs are more efficient...
+			for (i = 0; i <= A_WIDTH/16; i++) begin
+				MC_UOR16 #(
+					.WIDTH(min(A_WIDTH - (16 * i), 16)),
+				) reduce_or (
+					.A(A[16 * i +: min(A_WIDTH - (16 * i), 16)]),
+					.Y(_collate[i])
+				);
+			end
+			// ...and this can use NOR if it works out that way
+			assign Y[0] = !_collate;
+			wire [1023:0] _TECHMAP_DO_ = "opt";
+		end
+	endgenerate
+endmodule
