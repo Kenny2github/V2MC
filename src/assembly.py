@@ -44,8 +44,8 @@ def MC_UOR16(WIDTH: int) -> NBTStructure:
     width = WIDTH * 2 - 1 # 2 blocks per bit - 1
     return clone_clamp(NBTStructure(), 'structures/mc_uor16.nbt', width)
 
-def MC_UXOR2() -> NBTStructure:
-    return NBTStructure('structures/mc_uxor2.nbt')
+def MC_XOR() -> NBTStructure:
+    return NBTStructure('structures/mc_xor.nbt')
 
 def MC_UXOR4(WIDTH: int) -> NBTStructure:
     width = WIDTH * 2 - 1 # 2 blocks per bit - 1
@@ -69,9 +69,14 @@ if __name__ == '__main__':
         struct.get_nbt().write_file(f'structures/mc_a{arst_value}dff{width}_out.nbt')
     elif module in set(
         'MC_DFF31 MC_UAND16 MC_UNOR16 MC_UOR16 '
-        'MC_UXOR2 MC_UXOR4 MC_UXOR8 MC_UXOR16'.split()
+        'MC_UXOR4 MC_UXOR8 MC_UXOR16'.split()
     ):
         width = int(input('WIDTH = '))
         struct: NBTStructure = globals()[module](width)
         name = re.sub(r'\d+$', '', module.lower())
         struct.get_nbt().write_file(f'structures/{name}{width}_out.nbt')
+    elif module in set(
+        'MC_XOR'.split()
+    ):
+        struct: NBTStructure = globals()[module]()
+        struct.get_nbt().write_file(f'structures/{module.lower()}_out.nbt')
