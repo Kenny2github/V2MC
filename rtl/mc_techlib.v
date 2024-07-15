@@ -236,7 +236,7 @@ module \$reduce_and (A, Y);
 				.Y(Y[0])
 			);
 		end else begin
-			wire [A_WIDTH/16:0] _collate;
+			wire [0:A_WIDTH/16] _collate;
 			for (i = 0; i <= A_WIDTH/16; i++) begin
 				\$reduce_and #(
 					.A_SIGNED(0),
@@ -291,7 +291,7 @@ module \$reduce_or (A, Y);
 				.Y(Y[0])
 			);
 		end else begin
-			wire [A_WIDTH/16:0] _collate;
+			wire [0:A_WIDTH/16] _collate;
 			for (i = 0; i <= A_WIDTH/16; i++) begin
 				\$reduce_or #(
 					.A_SIGNED(0),
@@ -360,7 +360,7 @@ module \$reduce_xor (A, Y);
 				.Y(Y[0])
 			);
 		end else begin
-			wire [A_WIDTH/16:0] _collate;
+			wire [0:A_WIDTH/16] _collate;
 			for (i = 0; i <= A_WIDTH/16; i++) begin
 				\$reduce_xor #(
 					.A_SIGNED(0),
@@ -469,7 +469,7 @@ module \$logic_not (A, Y);
 				.Y(Y[0])
 			);
 		end else begin
-			wire [A_WIDTH/16:0] _collate;
+			wire [0:A_WIDTH/16] _collate;
 			// if we need multiple cells, regular ORs are more efficient...
 			for (i = 0; i <= A_WIDTH/16; i++) begin
 				\$reduce_or #(
