@@ -1,10 +1,53 @@
 #!/usr/bin/env python3
+import os
+from pathlib import Path
 import re
 from collections.abc import Iterator
 from typing import cast
 from nbt_structure_utils import Cuboid, NBTStructure, Vector
 
+STRUCTS: dict[str, NBTStructure] = {}
+
+def get_struct_ref(name: str) -> NBTStructure:
+    """Get a reference to a structure loaded from disk.
+    The structure is only loaded from disk once.
+
+    Do not modify this reference. If you need a modifiable copy of this
+    reference, use get_struct().
+
+    Parameters:
+        name: The MC_* name of the structure to get.
+
+    Returns:
+        The named structure.
+    """
+    if name not in STRUCTS:
+        STRUCTS[name] = NBTStructure(str(Path('structures', name.lower() + '.nbt')))
+    return STRUCTS[name]
+
+def get_struct(name: str) -> NBTStructure:
+    """Get a copy of a structure loaded from disk.
+    The structure is only loaded from disk once.
+
+    Parameters:
+        name: The MC_* name of the structure to get.
+
+    Returns:
+        A copy of the named structure.
+    """
+    return get_struct_ref(name).copy()
+
 def clone_clamp(struct: NBTStructure, name: str, width: int) -> NBTStructure:
+    """Truncate the named structure to z=width and clone it into struct.
+
+    Parameters:
+        struct: The structure to clone into.
+        name: The MC_* name of the structure to clone from.
+        width: The width in the z-axis to clamp to.
+
+    Returns:
+        The given struct, with modifications.
+    """
     loaded = NBTStructure(name)
     max_coords = loaded.get_max_coords()
     max_coords.z = width - 1
