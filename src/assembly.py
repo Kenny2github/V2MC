@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-import os
 from pathlib import Path
 import re
 from collections.abc import Iterator
@@ -21,8 +20,9 @@ def get_struct_ref(name: str) -> NBTStructure:
     Returns:
         The named structure.
     """
+    name = name.casefold()
     if name not in STRUCTS:
-        STRUCTS[name] = NBTStructure(str(Path('structures', name.lower() + '.nbt')))
+        STRUCTS[name] = NBTStructure(str(Path('structures', name + '.nbt')))
     return STRUCTS[name]
 
 def get_struct(name: str) -> NBTStructure:
@@ -48,7 +48,7 @@ def clone_clamp(struct: NBTStructure, name: str, width: int) -> NBTStructure:
     Returns:
         The given struct, with modifications.
     """
-    loaded = NBTStructure(name)
+    loaded = get_struct_ref(name)
     max_coords = loaded.get_max_coords()
     max_coords.z = width - 1
     volume = cast(Iterator[Vector], Cuboid(Vector(0, 0, 0), max_coords))
@@ -57,15 +57,15 @@ def clone_clamp(struct: NBTStructure, name: str, width: int) -> NBTStructure:
 
 def MC_DFF31(WIDTH: int) -> NBTStructure:
     width = WIDTH * 2 + 1 # 2 blocks per bit + 2 blocks per clk - 1
-    return clone_clamp(NBTStructure(), 'structures/mc_dff31.nbt', width)
+    return clone_clamp(NBTStructure(), 'mc_dff31', width)
 
 def MC_ADFF31(WIDTH: int, ARST_VALUE: int) -> NBTStructure:
     # load structures
-    a0dff1_cell = NBTStructure('structures/mc_a0dff1_cell.nbt')
-    a1dff1_cell = NBTStructure('structures/mc_a1dff1_cell.nbt')
+    a0dff1_cell = get_struct_ref('mc_a0dff1_cell')
+    a1dff1_cell = get_struct_ref('mc_a1dff1_cell')
     # assemble structures together
     width = WIDTH * 2 + 3 # 2 blocks per bit + 2 blocks per (clk, arst) - 1
-    struct = clone_clamp(NBTStructure(), 'structures/mc_adff_input.nbt', width)
+    struct = clone_clamp(NBTStructure(), 'mc_adff_input', width)
     input_max_coords = struct.get_max_coords()
     for z in range(WIDTH):
         bit = WIDTH - 1 - z
@@ -77,30 +77,30 @@ def MC_ADFF31(WIDTH: int, ARST_VALUE: int) -> NBTStructure:
 
 def MC_UAND16(WIDTH: int) -> NBTStructure:
     width = max(2, WIDTH * 2 - 1) # 2 blocks per bit - 1, but 1 bit needs 2
-    return clone_clamp(NBTStructure(), 'structures/mc_uand16.nbt', width)
+    return clone_clamp(NBTStructure(), 'mc_uand16', width)
 
 def MC_UNOR16(WIDTH: int) -> NBTStructure:
     width = WIDTH * 2 - 1 # 2 blocks per bit - 1
-    return clone_clamp(NBTStructure(), 'structures/mc_unor16.nbt', width)
+    return clone_clamp(NBTStructure(), 'mc_unor16', width)
 
 def MC_UOR16(WIDTH: int) -> NBTStructure:
     width = WIDTH * 2 - 1 # 2 blocks per bit - 1
-    return clone_clamp(NBTStructure(), 'structures/mc_uor16.nbt', width)
+    return clone_clamp(NBTStructure(), 'mc_uor16', width)
 
 def MC_XOR() -> NBTStructure:
-    return NBTStructure('structures/mc_xor.nbt')
+    return get_struct('mc_xor')
 
 def MC_UXOR4(WIDTH: int) -> NBTStructure:
     width = WIDTH * 2 - 1 # 2 blocks per bit - 1
-    return clone_clamp(NBTStructure(), 'structures/mc_uxor4.nbt', width)
+    return clone_clamp(NBTStructure(), 'mc_uxor4', width)
 
 def MC_UXOR8(WIDTH: int) -> NBTStructure:
     width = WIDTH * 2 - 1 # 2 blocks per bit - 1
-    return clone_clamp(NBTStructure(), 'structures/mc_uxor8.nbt', width)
+    return clone_clamp(NBTStructure(), 'mc_uxor8', width)
 
 def MC_UXOR16(WIDTH: int) -> NBTStructure:
     width = WIDTH * 2 - 1 # 2 blocks per bit - 1
-    return clone_clamp(NBTStructure(), 'structures/mc_uxor16.nbt', width)
+    return clone_clamp(NBTStructure(), 'mc_uxor16', width)
 
 if __name__ == '__main__':
     module = input('Module: ').upper()
