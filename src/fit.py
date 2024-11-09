@@ -1,10 +1,11 @@
 from collections import deque
-import json
 from typing import Optional
 
-from yosys_techmap import Bit, Cell, CellDict, PortDict, PortDirections, gather_cells
+from pyosys.libyosys import Design, IdString, escape_id, run_pass
 
-def place(techmap: str, module: str) -> list[list[Cell]]:
+from yosys_techmap import Node, cell_graph
+
+def place(techmap: str, module: str) -> list[list[Node]]:
     """Perform preliminary placement of cells in a module.
 
     Parameters:
@@ -14,33 +15,33 @@ def place(techmap: str, module: str) -> list[list[Cell]]:
     Returns:
         Structure containing placed cells.
     """
-    with open(techmap, 'rb') as f:
-        mod = json.load(f)['modules'][module]
-        cell_dicts: dict[str, CellDict] = mod['cells']
-        port_dicts: dict[str, PortDict] = mod['ports']
-    cells = gather_cells(module, cell_dicts, port_dicts)
-    q = deque[Optional[Cell]]()
-    q.append(cells[module])
+    design = Design()
+    run_pass(f'read_rtlil {techmap}', design)
+    mod = design.module(IdString(escape_id(module)))
+
+    origins = cell_graph(mod)
+
+    q = deque[Optional[Node]]()
+    seen: set[Node] = set()
+    rows: list[list[Node]] = [[]]
+    for node in origins:
+        q.append(node)
     q.append(None)
-    rows: list[list[Cell]] = [[]]
-    seen: set[Bit] = set()
+
     while q:
-        cell = q.popleft()
-        if cell is None:
+        node = q.popleft()
+        if node is None:
             if q:
                 q.append(None)
                 rows.append([])
             continue
-        for name, ports in cell.connections.items():
-            for port in ports:
-                if cell.port_directions[name] == PortDirections.INPUT:
-                    continue
-                if port.bit in seen:
-                    continue
-                seen.add(port.bit)
-                q.append(port.of)
-        rows[-1].append(cell)
-    return rows[:-1]
+        rows[-1].append(node)
+        seen.add(node)
+        for neighbor in node.neighbors:
+            if neighbor in seen:
+                continue
+            q.append(node)
+    return rows
 
 if __name__ == '__main__':
     path = input('Path: ')
