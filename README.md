@@ -9,7 +9,9 @@ This project is purely for technology mapping, placement, routing, or some combi
 ## Dependencies
 The following must be in your `PATH`:
 * Python 3
-* Yosys 0.42
+* Yosys 0.47 built with Python support (`make ENABLE_PYOSYS=1 && make install`)
+
+We require pyosys (`python3 setup.py install` at root of Yosys repository, which you should already have from building it) in order to access the Yosys internal representation of RTL designs.
 
 We require the dependencies in `requirements.txt` in order to manipulate NBT structures.
 
